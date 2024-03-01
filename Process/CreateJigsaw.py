@@ -15,6 +15,8 @@ from skimage.util import img_as_float
 from skimage import io
 import matplotlib.pyplot as plt
 import argparse
+import numpy as np
+from scipy.spatial import Voronoi, voronoi_plot_2d
 
 def _parse_args():
     """construct the argument parser and parse the arguments"""
@@ -31,13 +33,17 @@ def _segment_image(image_path, num_segments):
     # apply SLIC and extract (approximately) the supplied number
     # of segments
     segments = slic(image, 
-                    n_segments=num_segments,
+                    n_segments=num_segments, 
                     sigma=5,
                     compactness=30,
                     enforce_connectivity=True,
                     slic_zero=True)
 
     boundaries = find_boundaries(segments)
+
+    return segments,boundaries
+
+def plot_puzzle(segments):
     # show the output of SLIC
     fig = plt.figure("Superpixels")
     ax = fig.add_subplot(1, 1, 1)
@@ -47,6 +53,50 @@ def _segment_image(image_path, num_segments):
     # show the plots
     plt.show()
 
+def determine_medoids(segments):
+    """
+    each medoid is the closest real datapoint to the centroid. 
+    The centroid's component is the average of values in that dimension for all membership elements
+    """
+
+    resultant_medoids=list()
+
+    # for each cluster
+    for i in range(segments.min(),segments.max()):
+        
+        #get a list of array positions for the current cluster
+        indices=np.argwhere(segments==i)
+        #take the average of those cluster positions in the 0th and 1th dimension
+        #round them to be real pixels
+        centroid_component_0=np.round(np.mean(indices[:,0]),0)
+        centroid_component_1=np.round(np.mean(indices[:,1]),0)
+
+        resultant_medoids.append(
+            [centroid_component_0,centroid_component_1]
+        )
+
+    return np.array(resultant_medoids)
+    
+def merge_clusters():
+    """
+    clusters might be too close too one another, concentric, or oddly shaped
+    one heuristic that could catch this is if the medoids are within some tolerance
+    of one another
+    """
+    pass
+
+def create_Voronoi_object(medoids):
+
+    my_Voronoi=Voronoi(medoids)
+    voronoi_plot_2d(my_Voronoi)
+    plt.show()
+
+
 if __name__ == '__main__':
     ap = _parse_args()
-    _segment_image(ap.image, ap.segments)
+    segments,_=_segment_image(ap.image, ap.segments)
+    print(segments)
+    medoids=determine_medoids(segments)
+    # print(medoids)
+    plot_puzzle(segments)
+    create_Voronoi_object(medoids)
