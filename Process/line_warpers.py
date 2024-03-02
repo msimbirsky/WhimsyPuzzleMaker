@@ -28,6 +28,9 @@ def generate_anchor_point_coordinates(start_coord, stop_coord, neck_width, neck_
     Coordinates are needed to define the anchor points of a bezier curve for the interlocking segment.
     The points connect at the start and stop coordinates, and curves out to create a thinner (neck) and wider (head) segment.
 
+    The start and stop coordinates are assumed to lie on the same line. The 
+    anchor points should be rotated to be orthogonal to the line defined by the start and stop coordinates.
+    
     Args:
         start_coord (tuple): The starting coordinate of the puzzle piece.
         stop_coord (tuple): The ending coordinate of the puzzle piece.
