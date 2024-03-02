@@ -22,9 +22,12 @@ def midpoint(p1, p2):
     return (p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2
 
 
-def generate_interlocking_segment(start_coord, stop_coord, neck_width, neck_height, head_width, head_height) -> list[tuple]:
-    """Given the start and stop coordinates, generate a curve that represents an interlocking puzzle piece.
-    
+def generate_anchor_point_coordinates(start_coord, stop_coord, neck_width, neck_height, head_width, head_height) -> list[tuple]:
+    """"Given the start and stop coordinates, the 10 coordinates that can be used to generate the curved interlocking segment.
+
+    Coordinates are needed to define the anchor points of a bezier curve for the interlocking segment.
+    The points connect at the start and stop coordinates, and curves out to create a thinner (neck) and wider (head) segment.
+
     Args:
         start_coord (tuple): The starting coordinate of the puzzle piece.
         stop_coord (tuple): The ending coordinate of the puzzle piece.
@@ -32,9 +35,9 @@ def generate_interlocking_segment(start_coord, stop_coord, neck_width, neck_heig
         neck_height (int): The height of the neck of the puzzle piece.
         head_width (int): The width of the head of the puzzle piece.
         head_height (int): The height of the head of the puzzle piece.
-        
+
     Returns:
-        list[tuple]: A list of coordinates (x, y) that define a curve for the interlocking segment.
+        list[tuple]: A list of anchor coordinates (x, y) that define a curve for the interlocking segment.
     """
 
     anchor_points = [None] * 10
@@ -61,3 +64,26 @@ def generate_interlocking_segment(start_coord, stop_coord, neck_width, neck_heig
     anchor_points = [rotate(origin, point, angle) for point in anchor_points]
 
     return anchor_points
+
+
+def generate_interlocking_segment(start_coord, stop_coord, neck_width, neck_height, head_width, head_height) -> list[tuple]:
+    """Given the start and stop coordinates, generate a curve that represents an interlocking puzzle piece.
+    
+    Args:
+        start_coord (tuple): The starting coordinate of the puzzle piece.
+        stop_coord (tuple): The ending coordinate of the puzzle piece.
+        neck_width (int): The width of the neck of the puzzle piece.
+        neck_height (int): The height of the neck of the puzzle piece.
+        head_width (int): The width of the head of the puzzle piece.
+        head_height (int): The height of the head of the puzzle piece.
+        
+    Returns:
+        list[tuple]: A list of coordinates (x, y) that define a curve for the interlocking segment.
+    """
+
+    anchor_points = generate_anchor_point_coordinates(start_coord, stop_coord, neck_width, neck_height, head_width, head_height)
+
+    # Generate the bezier curve
+    # todo: bezier curve(anchor_points)
+
+    return []
