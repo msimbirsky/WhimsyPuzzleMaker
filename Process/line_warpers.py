@@ -90,3 +90,5 @@ def generate_interlocking_segment(start_coord, stop_coord, neck_width, neck_heig
     # todo: bezier curve(anchor_points)
 
     return []
+
+# todo: graphical vector format
