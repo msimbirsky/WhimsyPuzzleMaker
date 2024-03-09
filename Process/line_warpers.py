@@ -64,7 +64,7 @@ def generate_anchor_point_coordinates(start_coord, stop_coord, neck_width, neck_
     # Rotate the coordinates to align with the base line
     origin = midpoint(start_coord, stop_coord)
     angle = math.atan2(stop_coord[1] - start_coord[1], stop_coord[0] - start_coord[0])
-    anchor_points = [rotate(origin, point, angle) for point in anchor_points]
+    anchor_points[1:9] = [rotate(origin, point, angle) for point in anchor_points[1:9]]
 
     return anchor_points
 

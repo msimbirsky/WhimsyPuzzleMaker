@@ -5,8 +5,8 @@ from Process.line_warpers import generate_anchor_point_coordinates, rotate
 
 
 @pytest.mark.parametrize(
-    ("start_coord", "stop_coord", "neck_width", "neck_height", "head_width", "head_height", "expected_coords"),
-    ((10, 0), (20, 0), 10, 20, 30, 80, 
+    "start_coord,stop_coord,neck_width,neck_height,head_width,head_height,expected_coords",
+    [((10, 0), (20, 0), 10, 20, 30, 80, 
      [
         (10.0, 0.0),
         (10.0, 20.0),
@@ -19,21 +19,20 @@ from Process.line_warpers import generate_anchor_point_coordinates, rotate
         (20.0, 20.0),
         (20.0, 0.0),
     ]),
-    ((0., 160.), (0., 300.), 140, 90, 310, 550,
-    [
-        (0.0, 160.0),
-        (90.0, 160.0),
+    ((0., 300.), (0., 160.), 170, 90, 400, 550,
+[
+        (0.0, 330.0),
+        (90.0, 330.0),
         (90.0, 400.0),
         (365.0, 400.0),
         (640.0, 400.0),
         (640.0, 90.0),
         (365.0, 90.0),
         (90.0, 90.0),
-        (90.0, 330.0),
-        (0.0, 330.0),
-     
-     ],
-    )
+        (90.0, 160.0),
+        (0.0, 160.0),
+     ]),
+    ],
 )
 def test_generate_anchor_point_coordinates(start_coord, stop_coord, neck_width, neck_height, head_width, head_height, expected_coords):
     """Test the generate_interlocking_segment function."""
